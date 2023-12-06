@@ -1,0 +1,41 @@
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if(nums1.length>nums2.length)
+            return findMedianSortedArrays(nums2,nums1);
+
+        int x = nums1.length;
+        int y = nums2.length;
+
+        int low =0;
+        int high = x;
+
+        while (low<=high){
+
+            int partitionx = (low+high)/2;
+            int partitiony =(x+y+1)/2-partitionx;
+
+            int maxleftX = partitionx==0?Integer.MIN_VALUE:nums1[partitionx-1];
+            int minrightX = partitionx==x?Integer.MAX_VALUE:nums1[partitionx];
+
+            int maxrightY =partitiony==0?Integer.MIN_VALUE:nums2[partitiony-1];
+            int minrightY = partitiony==y?Integer.MAX_VALUE:nums2[partitiony];
+
+            if(maxleftX <= minrightY && maxrightY<=minrightX){
+                if((x+y)%2==0){
+                    return (double)(Math.max(maxleftX,maxrightY)+Math.min(minrightX,minrightY))/2;
+                }
+                else
+                    return Math.max(maxleftX,maxrightY);
+
+            }
+
+            else if(maxleftX>minrightY)
+                high = partitionx-1;
+
+            else
+                low = partitionx+1;
+        }
+
+      return 0  ;
+    }
+}
