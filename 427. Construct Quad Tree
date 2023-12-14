@@ -1,0 +1,65 @@
+/*
+// Definition for a QuadTree node.
+class Node {
+    public boolean val;
+    public boolean isLeaf;
+    public Node topLeft;
+    public Node topRight;
+    public Node bottomLeft;
+    public Node bottomRight;
+
+    
+    public Node() {
+        this.val = false;
+        this.isLeaf = false;
+        this.topLeft = null;
+        this.topRight = null;
+        this.bottomLeft = null;
+        this.bottomRight = null;
+    }
+    
+    public Node(boolean val, boolean isLeaf) {
+        this.val = val;
+        this.isLeaf = isLeaf;
+        this.topLeft = null;
+        this.topRight = null;
+        this.bottomLeft = null;
+        this.bottomRight = null;
+    }
+    
+    public Node(boolean val, boolean isLeaf, Node topLeft, Node topRight, Node bottomLeft, Node bottomRight) {
+        this.val = val;
+        this.isLeaf = isLeaf;
+        this.topLeft = topLeft;
+        this.topRight = topRight;
+        this.bottomLeft = bottomLeft;
+        this.bottomRight = bottomRight;
+    }
+};
+*/
+
+class Solution {
+    public Node solve(int n, int r, int c, int [][] grid){
+        if(n==1){
+            return new Node(grid[r][c]==1,true);
+        }
+
+        Node topleft =solve(n/2,r,c,grid);
+        Node topright =solve(n/2,r,c+n/2,grid);
+        Node bottomleft =solve(n/2,r+n/2,c,grid);
+        Node bottomright =solve(n/2,r+n/2,c+n/2,grid);
+
+        if(topleft.isLeaf && topright.isLeaf && bottomleft.isLeaf && bottomright.isLeaf 
+        && topleft.val==topright.val && topleft.val==bottomleft.val &&
+         bottomleft.val==bottomright.val){
+            return new Node(topleft.val,true);
+        }
+
+        return new Node(false, false,topleft,topright,bottomleft,bottomright);
+    }
+    public Node construct(int[][] grid) {
+        int n = grid[0].length;
+
+        return solve(n,0,0,grid);  
+    }
+}
