@@ -1,0 +1,61 @@
+class TrieNode{
+    HashMap<Character,TrieNode> children ;
+    boolean endOfWord;
+    TrieNode(){
+        children = new HashMap<Character,TrieNode>();
+        endOfWord = false;
+    }
+}
+class WordDictionary {
+    TrieNode root;
+
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    public void addWord(String word) {
+        TrieNode cur = root;
+        for (char c : word.toCharArray()){
+            if(!cur.children.containsKey(c)){
+                cur.children.put(c,new TrieNode());
+            }
+            cur=cur.children.get(c);
+        }
+        cur.endOfWord = true; 
+    }
+
+    public boolean searchinword(int index, TrieNode cur,String word){
+        for (int i =index; i<word.length();i++){
+            char ch = word.charAt(i);
+            if (!cur.children.containsKey(ch)){
+                if(ch =='.'){
+                    for(char x: cur.children.keySet()){
+                        if (searchinword(i+1,cur.children.get(x),word))
+                            return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+            else{
+                cur =cur.children.get(ch);
+            }
+        
+        }
+        return cur.endOfWord;
+    }
+    
+    public boolean search(String word) {
+        return searchinword(0,this.root,word);    
+
+        }
+       
+    }
+
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
